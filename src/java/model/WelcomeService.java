@@ -19,7 +19,7 @@ public class WelcomeService {
         this.currentDate = LocalDateTime.now();
     }
 
-    public String partOfADay() {
+    private String partOfADay() {
         int hour;
         String partOfADay = "";
 

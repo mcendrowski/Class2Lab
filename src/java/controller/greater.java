@@ -7,11 +7,13 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.WelcomeService;
 
 /**
  *
@@ -32,17 +34,18 @@ public class greater extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet greater</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet greater at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+         try (PrintWriter out = response.getWriter()) {
+            String name = request.getParameter("username");
+            WelcomeService wc = new WelcomeService();
+            String responseMsg = wc.welcomeMessage(name);
+//            String responseMsg = "Hello " + name + ", isn't Java great!";
+            request.setAttribute("myMsg", responseMsg);
+
+            RequestDispatcher view
+                    = request.getRequestDispatcher("/welcomeResponse.jsp");
+            view.forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("errorMsg", e.getMessage());
         }
     }
 
